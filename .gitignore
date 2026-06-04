@@ -13,3 +13,4 @@ airflow/plugins/
 mlruns/
 *.parquet
 *.csv
+temp/
