@@ -1,0 +1,14 @@
+psycopg2-binary 
+  sqlalchemy 
+  python-dotenv 
+  pandas 
+  pyarrow 
+  boto3 
+  confluent-kafka 
+  pymongo 
+  apache-airflow 
+  dbt-spark 
+  scikit-learn 
+  mlflow 
+  streamlit 
+  faker

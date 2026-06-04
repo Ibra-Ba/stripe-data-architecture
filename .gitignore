@@ -1,0 +1,15 @@
+
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+logs/
+airflow/logs/
+airflow/plugins/
+mlruns/
+*.parquet
+*.csv
