@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 
 load_dotenv()
 
-# ── MongoDB ───────────────────────────────
+# ***** MongoDB ******************
 mongo  = MongoClient(os.getenv("MONGODB_URI"))
 db     = mongo["stripe_nosql"]
 
@@ -15,7 +15,7 @@ col_transactions = db["transactions"]
 col_fraud        = db["fraud_alerts"]
 col_logs         = db["logs"]
 
-# ── Kafka consumer ────────────────────────
+# ------------Kafka consumer ---------------------
 consumer = Consumer({
     "bootstrap.servers":  os.getenv("KAFKA_BOOTSTRAP_SERVERS"),
     "sasl.mechanisms":    "PLAIN",
