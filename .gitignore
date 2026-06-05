@@ -14,4 +14,5 @@ mlruns/
 *.parquet
 *.csv
 temp/
- pipeline/test_mongodb.py
+pipeline/test_mongodb.py
+pipeline/debug_consumer.py
