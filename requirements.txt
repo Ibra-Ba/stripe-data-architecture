@@ -1,14 +1,16 @@
 psycopg2-binary 
-  sqlalchemy 
-  python-dotenv 
-  pandas 
-  pyarrow 
-  boto3 
-  confluent-kafka 
-  pymongo 
-  apache-airflow 
-  dbt-spark 
-  scikit-learn 
-  mlflow 
-  streamlit 
-  faker
+sqlalchemy 
+python-dotenv 
+pandas 
+pyarrow 
+boto3 
+confluent-kafka 
+apache-airflow 
+dbt-spark 
+scikit-learn 
+mlflow 
+streamlit 
+faker
+pymongo[srv]==3.12
+dnspython==2.8.0
+pymongo==4.17.0
