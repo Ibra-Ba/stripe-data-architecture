@@ -12,6 +12,7 @@ mlflow
 streamlit 
 duckdb
 faker
+plotly
 pymongo[srv]==3.12
 dnspython==2.8.0
 pymongo==4.17.0
