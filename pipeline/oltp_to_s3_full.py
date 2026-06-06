@@ -27,15 +27,26 @@ def get_s3():
         )
     return s3
 
-def export_full(table: str):
-    """Export complet de la table — historique."""
-    print(f"Exporting full {table}...")
+# Toutes les tables en full export
+FULL_TABLES = ["transactions", "customers", "merchants"]
 
+def cast_uuid_columns(df: pd.DataFrame) -> pd.DataFrame:
+    for col in df.columns:
+        if df[col].dtype == object:
+            sample = df[col].dropna().iloc[0] if not df[col].dropna().empty else None
+            if sample and hasattr(sample, 'hex'):
+                df[col] = df[col].astype(str)
+    return df
+
+def export_full(table: str):
+    print(f"Exporting full {table}...")
     df = pd.read_sql(f"SELECT * FROM {table}", get_engine())
 
     if df.empty:
         print(f"No data in {table} — skipping.")
         return
+
+    df = cast_uuid_columns(df)
 
     local_path = f"/tmp/{table}_full.parquet"
     df.to_parquet(local_path, index=False)
@@ -45,7 +56,7 @@ def export_full(table: str):
     print(f"Uploaded {len(df)} rows → s3://{os.getenv('S3_BUCKET')}/{s3_key}")
 
 def run():
-    for table in ["transactions", "customers", "merchants", "refunds"]:
+    for table in FULL_TABLES:
         export_full(table)
     print("Full export complete.")
 

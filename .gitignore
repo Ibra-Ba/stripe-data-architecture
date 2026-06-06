@@ -16,3 +16,4 @@ mlruns/
 temp/
 pipeline/test_mongodb.py
 pipeline/debug_consumer.py
+ml/mlflow.db
