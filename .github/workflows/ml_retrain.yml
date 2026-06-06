@@ -1,0 +1,47 @@
+name: ML Retrain
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"   # tous les lundis à 2h UTC
+  workflow_dispatch:        # déclenchement manuel pour la démo
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install setuptools==70.3.0
+          pip install \
+            mlflow==2.9.2 \
+            scikit-learn \
+            pandas \
+            numpy \
+            duckdb \
+            boto3 \
+            python-dotenv \
+            psycopg2-binary
+
+      - name: Retrain fraud model
+        env:
+          MLFLOW_TRACKING_URI:   ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_ARTIFACT_ROOT:  ${{ secrets.MLFLOW_ARTIFACT_ROOT }}
+          AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION:            ${{ secrets.AWS_REGION }}
+          S3_BUCKET:             ${{ secrets.S3_BUCKET }}
+        run: python ml/train.py
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "ML retrain failed — check MLflow for details"

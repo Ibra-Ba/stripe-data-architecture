@@ -13,3 +13,7 @@ airflow/plugins/
 mlruns/
 *.parquet
 *.csv
+temp/
+pipeline/test_mongodb.py
+pipeline/debug_consumer.py
+ml/mlflow.db

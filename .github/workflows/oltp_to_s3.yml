@@ -1,0 +1,38 @@
+name: OLTP to S3
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # toutes les heures
+  workflow_dispatch:        # déclenchement manuel pour la démo
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            psycopg2-binary \
+            sqlalchemy \
+            pandas \
+            pyarrow \
+            boto3 \
+            python-dotenv
+
+      - name: Run export
+        env:
+          NEONDB_URL:            ${{ secrets.NEONDB_URL }}
+          AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION:            ${{ secrets.AWS_REGION }}
+          S3_BUCKET:             ${{ secrets.S3_BUCKET }}
+        run: python pipeline/oltp_to_s3.py
