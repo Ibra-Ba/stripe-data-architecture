@@ -10,6 +10,7 @@ dbt-spark
 scikit-learn 
 mlflow 
 streamlit 
+duckdb
 faker
 pymongo[srv]==3.12
 dnspython==2.8.0
