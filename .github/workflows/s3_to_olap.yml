@@ -1,0 +1,44 @@
+name: S3 to OLAP
+
+on:
+  workflow_run:
+    workflows: ["OLTP to S3"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  build_star_schema:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            duckdb \
+            boto3 \
+            python-dotenv
+
+      - name: Build star schema
+        env:
+          AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION:            ${{ secrets.AWS_REGION }}
+          S3_BUCKET:             ${{ secrets.S3_BUCKET }}
+        run: python olap/star_schema.py
+
+      - name: Upload DuckDB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: stripe-olap-duckdb
+          path: olap/stripe_olap.duckdb
+          retention-days: 7
